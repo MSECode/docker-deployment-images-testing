@@ -30,7 +30,7 @@ jobs:
       steps: 
       - id: file_changes
         if: github.event_name == 'push'
-        uses: trilom/file-changes-action@v1.2.3
+        uses: trilom/file-changes-action@v1.2.4
       - name: files
         if: github.event_name == 'push'
         id: check-modifications
@@ -41,7 +41,7 @@ jobs:
           echo '${{ steps.file_changes.outputs.files}}'
           echo '${{ steps.file_changes.outputs.files_modified}}'
           echo '${{ steps.file_changes.outputs.files_added}}'
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: find app name
         id: set-matrix
         run: |
@@ -170,7 +170,7 @@ jobs:
                       else
                           custom_matrix="$custom_matrix $element"
                       fi
-                  fi                
+                  fi
               fi
           done
           children_matrix="$children_matrix"
@@ -302,12 +302,12 @@ jobs:
           id: release-version
 
   ##################### check out the correct version (master or release) ###############
-        - uses: actions/checkout@v2
+        - uses: actions/checkout@v3
           if: matrix.version == 'master'
           with:
             ref: 'master'
 
-        - uses: actions/checkout@v2
+        - uses: actions/checkout@v3
           if: matrix.version == 'release'
           with:
             ref: '${{ steps.release-version.outputs.tag }}'
@@ -500,7 +500,7 @@ jobs:
         - name: tag source images for Ghcr.io
           id: tag-sources
           if: steps.get_args.outputs.CMPL_SRC == 'true'
-          run: docker tag ${{ steps.get_args.outputs.IMG_NAME }}_sources" ghcr.io/${{ steps.get_args.outputs.IMG_NAME_GITHUB }}_sources
+          run: docker tag ${{ steps.get_args.outputs.IMG_NAME }}_sources ghcr.io/${{ steps.get_args.outputs.IMG_NAME_GITHUB }}_sources"
 
         - name: Push Docker source images to Ghcr.io
           id: push-sources-ghcr
@@ -563,12 +563,12 @@ jobs:
           id: release-version
 
   ##################### check out the correct version (master or release) ###############
-        - uses: actions/checkout@v2
+        - uses: actions/checkout@v3
           if: matrix.version == 'master'
           with:
             ref: 'master'
 
-        - uses: actions/checkout@v2
+        - uses: actions/checkout@v3
           if: matrix.version == 'release'
           with:
             ref: '${{ steps.release-version.outputs.tag }}'
