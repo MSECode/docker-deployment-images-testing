@@ -11,7 +11,6 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
     debug:
@@ -505,12 +504,12 @@ jobs:
         - name: tag source images for Ghcr.io
           id: tag-sources
           if: steps.get_args.outputs.CMPL_SRC == 'true'
-          run: docker tag ${{ steps.get_args.outputs.IMG_NAME }}_sources" ${{ env.REGISTRY }}/${{env.IMAGE_NAME}}/${{ steps.get_args.outputs.IMG_NAME_GITHUB }}_sources"
+          run: docker tag ${{ steps.get_args.outputs.IMG_NAME }}_sources" ${{ env.REGISTRY }}/${{ github.repository }}/${{ steps.get_args.outputs.IMG_NAME_GITHUB }}_sources"
 
         - name: Push Docker source images to Ghcr.io
           id: push-sources-ghcr
           if: steps.get_args.outputs.CMPL_SRC == 'true'
-          run: docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}/${{ steps.get_args.outputs.IMG_NAME_GITHUB }}_sources" 
+          run: docker push ${{ env.REGISTRY }}/${{ github.repository }}/${{ steps.get_args.outputs.IMG_NAME_GITHUB }}_sources" 
 
         - name: Build Docker binaries images
           id: build-binaries
