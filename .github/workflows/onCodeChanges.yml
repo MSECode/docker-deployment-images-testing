@@ -484,7 +484,7 @@ jobs:
           run: docker tag ${{ steps.get_args.outputs.IMG_NAME }}_sources" ghcr.io/MSECode/${{ steps.get_args.outputs.IMG_NAME }}_sources
 
         - name: Push Docker source images to Ghcr.io
-          id: push-sources
+          id: push-sources-ghcr
           if: steps.get_args.outputs.CMPL_SRC == 'true'
           run: docker push ghcr.io/MSECode/${{ steps.get_args.outputs.IMG_NAME }}_sources" 
 
