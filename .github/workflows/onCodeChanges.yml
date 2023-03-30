@@ -755,7 +755,7 @@ jobs:
         #   uses: peter-evans/repository-dispatch@v1
         #   with:
         #     token: ${{ secrets.GITHUB_TOKEN  }}
-        #     repository: {{ env.IMAGE_NAME }}
+        #     repository: valegagge/docker-deployment-images-testing
         #     event-type: app_testing_from_code
         #     client-payload: '{"type": "app_testing_from_code", "app_list": "${{ steps.get_args.outputs.demos_matrix }}", "img_list": "icubteamcode/${{matrix.apps}}", "version_list": "master", "tag_list": "sources", "children_flag": ${{needs.check_files.outputs.children_flag}} }'
 
@@ -764,7 +764,7 @@ jobs:
         #   uses: peter-evans/repository-dispatch@v1
         #   with:
         #     token: ${{ secrets.GITHUB_TOKEN  }}
-        #     repository: {{ env.IMAGE_NAME }}
+        #     repository: valegagge/docker-deployment-images-testing
         #     event-type: app_testing_from_code
         #     client-payload: '{"type": "app_testing_from_code", "app_list": "${{ steps.get_args.outputs.demos_matrix }}", "img_list": "icubteamcode/${{matrix.apps}}", "version_list": "master", "tag_list": "binaries", "children_flag": ${{needs.check_files.outputs.children_flag}} }'
         
@@ -780,7 +780,7 @@ jobs:
           uses: peter-evans/repository-dispatch@v1
           with:
             token: ${{ secrets.GITHUB_TOKEN  }}
-            repository: {{ env.IMAGE_NAME }}
+            repository: valegagge/docker-deployment-images-testing
             event-type: repository_trigger
             client-payload: '{"version": "${{ github.event.client_payload.version }}", "type": "repository_trigger", "img_list": "${{ needs.check_files.outputs.children_matrix }}"}'
             
@@ -790,7 +790,7 @@ jobs:
           uses: peter-evans/repository-dispatch@v1
           with:
             token: ${{ secrets.GITHUB_TOKEN  }}
-            repository: {{ env.IMAGE_NAME }}
+            repository: valegagge/docker-deployment-images-testing
             event-type: cron_trigger
             client-payload: '{"type": "cron_trigger", "img_list": "${{ needs.check_files.outputs.children_matrix }}"}'
 
