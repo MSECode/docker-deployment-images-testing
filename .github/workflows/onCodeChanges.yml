@@ -300,7 +300,7 @@ jobs:
         - uses: oprypin/find-latest-tag@v1
           if: matrix.version == 'release'
           with:
-            repository: ${{ env.IMAGE_NAME }}
+            repository: valegagge/docker-deployment-images-testing
             releases-only: true  
           id: release-version
 
@@ -562,7 +562,7 @@ jobs:
         - uses: oprypin/find-latest-tag@v1
           if: matrix.version == 'release'
           with:
-            repository: {{ env.IMAGE_NAME }}
+            repository: valegagge/docker-deployment-images-testing
             releases-only: true  
           id: release-version
 
