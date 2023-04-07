@@ -12,6 +12,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
+  REPOSITORY_OWNER: ${{ github.repository_owner }}
 
 jobs:
     debug:
@@ -30,7 +31,7 @@ jobs:
 
     check_files:
       runs-on: [ubuntu-latest]
-      needs: debug
+      needs: debug:
       steps: 
       - id: file_changes
         if: github.event_name == 'push'
@@ -465,7 +466,7 @@ jobs:
                 fi  
                 if [[ $tag_flag != false ]] 
                 then
-                    tag_arg="--tag \"$line"
+                    tag_arg="--tag ${{ env.REPOSITORY_OWNER }}/\"$line"
                     img_name="\"$line"
                 fi
                 if [[ $tag_github_flag != false ]] 
@@ -500,12 +501,12 @@ jobs:
         - name: Push Docker source images
           id: push-sources
           if: steps.get_args.outputs.CMPL_SRC == 'true'
-          run: docker push ${{ steps.get_args.outputs.IMG_NAME }}_sources" 
+          run: docker push ${{env.REPOSITORY_OWNER}}/${{ steps.get_args.outputs.IMG_NAME }}_sources" 
 
         - name: tag source images for Ghcr.io
           id: tag-sources
           if: steps.get_args.outputs.CMPL_SRC == 'true'
-          run: docker tag ${{ steps.get_args.outputs.IMG_NAME }}_sources" ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/${{ steps.get_args.outputs.IMG_NAME_GITHUB }}_sources"
+          run: docker tag ${{env.REPOSITORY_OWNER}}/${{ steps.get_args.outputs.IMG_NAME }}_sources" ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/${{ steps.get_args.outputs.IMG_NAME_GITHUB }}_sources"
 
         - name: Push Docker source images to Ghcr.io
           id: push-sources-ghcr
@@ -520,7 +521,7 @@ jobs:
         - name: Push Docker binaries images
           id: push-binaries
           if: steps.get_args.outputs.CMPL_BIN == 'true'
-          run: docker push ${{ steps.get_args.outputs.IMG_NAME }}_binaries"
+          run: docker push ${{env.REPOSITORY_OWNER}}/${{ steps.get_args.outputs.IMG_NAME }}_binaries"
 
         # - name: Trigger testing pipeline for source image
         #   if: steps.build-sources.outcome == 'success' && steps.push-sources.outcome == 'success' && steps.get_args.outputs.demos_flag_output == 'true' && ! cancelled()
