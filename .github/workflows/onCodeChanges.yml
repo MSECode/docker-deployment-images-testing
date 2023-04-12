@@ -26,8 +26,6 @@ jobs:
         run: |
           echo "I received the version: ${{ github.event.client_payload.version }}"
 
-      
-
     check_files:
       runs-on: [ubuntu-latest]
       needs: debug
@@ -133,7 +131,7 @@ jobs:
                           superbuild_flag=true
                           element_flag=true
                       fi  
-                      if [ "$line" == "[sources]" ] || [ "$line" == "[binaries]" ] || [ "$line" == "[tag]" ] || [ "$line" == "[superbuild]" ] || [ "$line" == "[demos]" ] || [ "$line" == "" ]
+                      if [ "$line" == "[users]" ] || [ "$line" == "[versioning]" ] || [ "$line" == "[date]" ] || [ "$line" == "[images]" ] || [ "$line" == "[superbuild]" ] || [ "$line" == "[demos]" ] || [ "$line" == "" ]
                       then
                           children_flag=false
                       fi
@@ -322,11 +320,11 @@ jobs:
           run: echo ${{ secrets.DOCKERHUB_PASSWORD }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
   
   #########################################################################################        
-        - name: Log in to the Container registry          
-          uses: docker/login-action@v2.0.0          
-          with:            
-            registry: ghcr.io            
-            username: ${{ github.actor }}            
+        - name: Log in to the Container registry
+          uses: docker/login-action@v2.0.0
+          with:
+            registry: ghcr.io
+            username: ${{ github.actor }}
             password: ${{ secrets.GITHUB_TOKEN }} 
 
   ##################### Command to set the tag for the date argument ######################
@@ -363,13 +361,15 @@ jobs:
         - name: Get Build Arguments
           id: get_args
           run: |
+            start_img=""
+            source_img=""
             sources_args=""
             binaries_args=""
             tag_arg=""
-            sources_flag=false
-            binaries_flag=false
-            tag_flag=false
-            tag_github_flag=false
+            users_flag=false
+            versioning_flag=false
+            date_flag=false
+            images_flag=false
             compile_sources=false
             compile_binaries=false
             demos_matrix=""
@@ -390,6 +390,7 @@ jobs:
               line=$(echo "$line" > temp.tmp && sed -i 's/{{matrix.version}}/${{matrix.version}}/g' temp.tmp && cat temp.tmp)
               line=$(echo "$line" > temp.tmp && sed -i 's/{{matrix.apps}}/${{matrix.apps}}/g' temp.tmp && cat temp.tmp)
               line=$(echo "$line" > temp.tmp && sed -i 's/{{steps.get_version.outputs.VERSION}}/${{steps.get_version.outputs.VERSION}}/g' temp.tmp && cat temp.tmp)
+              line=$(echo "$line" > temp.tmp && sed -i 's/{{env.REPOSITORY_OWNER}}/${{env.REPOSITORY_OWNER}}/g' temp.tmp && cat temp.tmp)
               echo "dopo line is $line"
               if [ "$line" == "[sources]" ]
               then
