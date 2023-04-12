@@ -12,6 +12,7 @@ env:
   REGISTRY: ghcr.io
   REPOSITORY_NAME: ${{ github.repository }}
   REPOSITORY_OWNER: ${{ github.repository_owner }}
+  DOCKERHUB_OWNER: ${{ secrets.DOCKERHUB_USERNAME }}
 
 jobs:
     debug:
@@ -131,7 +132,7 @@ jobs:
                           superbuild_flag=true
                           element_flag=true
                       fi  
-                      if [ "$line" == "[users]" ] || [ "$line" == "[versioning]" ] || [ "$line" == "[date]" ] || [ "$line" == "[images]" ] || [ "$line" == "[superbuild]" ] || [ "$line" == "[demos]" ] || [ "$line" == "" ]
+                      if [ "$line" == "[sources]" ] || [ "$line" == "[binaries]" ] || [ "$line" == "[tag]" ] || [ "$line" == "[superbuild]" ] || [ "$line" == "[demos]" ] || [ "$line" == "" ]
                       then
                           children_flag=false
                       fi
@@ -366,10 +367,10 @@ jobs:
             sources_args=""
             binaries_args=""
             tag_arg=""
-            users_flag=false
-            versioning_flag=false
-            date_flag=false
-            images_flag=false
+            sources_flag=false
+            binaries_flag=false
+            tag_flag=false
+            tag_github_flag=false
             compile_sources=false
             compile_binaries=false
             demos_matrix=""
@@ -382,6 +383,7 @@ jobs:
             echo "{{matrix.version}} - ${{matrix.version}}"
             echo "{{matrix.apps}} - ${{matrix.apps}}"
             echo "{{steps.get_version.outputs.VERSION}} - ${{steps.get_version.outputs.VERSION}}"
+            echo "{{env.REPOSITORY_OWNER}} - ${{env.REPOSITORY_OWNER}}"
             while read -r line || [ -n "$line" ]
             do
               echo "line is $line"
@@ -465,7 +467,7 @@ jobs:
                 fi  
                 if [[ $tag_flag != false ]] 
                 then
-                    tag_arg="--tag fakerepo/\"$line"
+                    tag_arg="--tag ${{env.REPOSITORY_OWNER}}/\"$line"
                 fi
                 if [[ $tag_github_flag != false ]] 
                 then
@@ -498,7 +500,7 @@ jobs:
         - name: Tag source images for dockerhub
           id: tag-sources-dockerhub
           if: steps.get_args.outputs.CMPL_SRC == 'true'
-          run: docker tag fakerepo/${{ steps.get_args.outputs.IMG_NAME_GITHUB }}_sources" ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.get_args.outputs.IMG_NAME_GITHUB }}_sources"
+          run: docker tag ${{env.REPOSITORY_OWNER}}/${{ steps.get_args.outputs.IMG_NAME_GITHUB }}_sources" ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.get_args.outputs.IMG_NAME_GITHUB }}_sources"
 
         - name: Push Docker source images
           id: push-sources-dockerhub
@@ -523,7 +525,7 @@ jobs:
         - name: Tag binaries images for dockerhub
           id: tag-binaries-dockerhub
           if: steps.get_args.outputs.CMPL_BIN == 'true'
-          run: docker tag fakerepo/${{ steps.get_args.outputs.IMG_NAME_GITHUB }}_binaries" ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.get_args.outputs.IMG_NAME_GITHUB }}_binaries"
+          run: docker tag ${{env.REPOSITORY_OWNER}}/${{ steps.get_args.outputs.IMG_NAME_GITHUB }}_binaries" ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.get_args.outputs.IMG_NAME_GITHUB }}_binaries"
         
         - name: Push Docker binaries images
           id: push-binaries-dockerhub
@@ -533,7 +535,7 @@ jobs:
         - name: Tag binaries images for ghcr
           id: tag-binaries-ghcr
           if: steps.get_args.outputs.CMPL_BIN == 'true'
-          run: docker tag fakerepo/${{ steps.get_args.outputs.IMG_NAME_GITHUB }}_binaries" ${{ env.REGISTRY }}/${{ env.REPOSITORY_NAME }}/${{ steps.get_args.outputs.IMG_NAME_GITHUB }}_binaries"
+          run: docker tag ${{env.REPOSITORY_OWNER}}/${{ steps.get_args.outputs.IMG_NAME_GITHUB }}_binaries" ${{ env.REGISTRY }}/${{ env.REPOSITORY_NAME }}/${{ steps.get_args.outputs.IMG_NAME_GITHUB }}_binaries"
         
         - name: Push binaries images to ghcr
           id: push-binaries-ghcr
