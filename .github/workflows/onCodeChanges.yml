@@ -497,12 +497,12 @@ jobs:
         - name: Tag source images for Ghcr.io
           id: tag-sources-ghcr
           if: steps.get_args.outputs.CMPL_SRC == 'true'
-          run: docker tag ${{env.DEFAULT_USER}}/${{ steps.get_args.outputs.IMG_NAME }}_sources" ${{ env.REGISTRY }}/${{ env.REPOSITORY_NAME }}/${{ steps.get_args.outputs.IMG_NAME }}_sources"
+          run: docker tag ${{env.DEFAULT_USER}}/${{ steps.get_args.outputs.IMG_NAME }}_sources" ${{ env.REGISTRY }}/${{ env.REPOSITORY_NAME }}/${{ env.IMAGE_PREFIX }}${{ steps.get_args.outputs.IMG_NAME }}_sources"
 
         - name: Push source images to Ghcr.io
           id: push-sources-ghcr
           if: steps.get_args.outputs.CMPL_SRC == 'true'
-          run: docker push ${{ env.REGISTRY }}/${{ env.REPOSITORY_NAME }}/${{ steps.get_args.outputs.IMG_NAME }}_sources" 
+          run: docker push ${{ env.REGISTRY }}/${{ env.REPOSITORY_NAME }}/${{ env.IMAGE_PREFIX }}${{ steps.get_args.outputs.IMG_NAME }}_sources" 
 
         - name: Build Docker binaries images
           id: build-binaries
@@ -522,12 +522,12 @@ jobs:
         - name: Tag binaries images for ghcr
           id: tag-binaries-ghcr
           if: steps.get_args.outputs.CMPL_BIN == 'true'
-          run: docker tag ${{env.DEFAULT_USER}}/${{ steps.get_args.outputs.IMG_NAME }}_binaries" ${{ env.REGISTRY }}/${{ env.REPOSITORY_NAME }}/${{ steps.get_args.outputs.IMG_NAME }}_binaries"
+          run: docker tag ${{env.DEFAULT_USER}}/${{ steps.get_args.outputs.IMG_NAME }}_binaries" ${{ env.REGISTRY }}/${{ env.REPOSITORY_NAME }}/${{ env.IMAGE_PREFIX }}${{ steps.get_args.outputs.IMG_NAME }}_binaries"
         
         - name: Push binaries images to ghcr
           id: push-binaries-ghcr
           if: steps.get_args.outputs.CMPL_BIN == 'true'
-          run: docker push ${{ env.REGISTRY }}/${{ env.REPOSITORY_NAME }}/${{ steps.get_args.outputs.IMG_NAME }}_binaries"
+          run: docker push ${{ env.REGISTRY }}/${{ env.REPOSITORY_NAME }}/${{ env.IMAGE_PREFIX }}${{ steps.get_args.outputs.IMG_NAME }}_binaries"
 
         # - name: Trigger testing pipeline for source image
         #   if: steps.build-sources.outcome == 'success' && steps.push-sources.outcome == 'success' && steps.get_args.outputs.demos_flag_output == 'true' && ! cancelled()
@@ -741,12 +741,12 @@ jobs:
         - name: Tag source images for Ghcr.io
           id: tag-sources-ghcr
           if: steps.get_args.outputs.CMPL_SRC == 'true'
-          run: docker tag ${{env.DEFAULT_USER}}/${{ steps.get_args.outputs.IMG_NAME }}_sources" ${{ env.REGISTRY }}/${{ env.REPOSITORY_NAME }}/${{ steps.get_args.outputs.IMG_NAME }}_sources"
+          run: docker tag ${{env.DEFAULT_USER}}/${{ steps.get_args.outputs.IMG_NAME }}_sources" ${{ env.REGISTRY }}/${{ env.REPOSITORY_NAME }}/${{ env.IMAGE_PREFIX }}${{ steps.get_args.outputs.IMG_NAME }}_sources"
 
         - name: Push source images to Ghcr.io
           id: push-sources-ghcr
           if: steps.get_args.outputs.CMPL_SRC == 'true'
-          run: docker push ${{ env.REGISTRY }}/${{ env.REPOSITORY_NAME }}/${{ steps.get_args.outputs.IMG_NAME }}_sources" 
+          run: docker push ${{ env.REGISTRY }}/${{ env.REPOSITORY_NAME }}/${{ env.IMAGE_PREFIX }}${{ steps.get_args.outputs.IMG_NAME }}_sources" 
 
         - name: Build Docker binaries images
           id: build-binaries
@@ -766,12 +766,12 @@ jobs:
         - name: Tag binaries images for ghcr
           id: tag-binaries-ghcr
           if: steps.get_args.outputs.CMPL_BIN == 'true'
-          run: docker tag ${{env.DEFAULT_USER}}/${{ steps.get_args.outputs.IMG_NAME }}_binaries" ${{ env.REGISTRY }}/${{ env.REPOSITORY_NAME }}/${{ steps.get_args.outputs.IMG_NAME }}_binaries"
+          run: docker tag ${{env.DEFAULT_USER}}/${{ steps.get_args.outputs.IMG_NAME }}_binaries" ${{ env.REGISTRY }}/${{ env.REPOSITORY_NAME }}/${{ env.IMAGE_PREFIX }}${{ steps.get_args.outputs.IMG_NAME }}_binaries"
         
         - name: Push binaries images to ghcr
           id: push-binaries-ghcr
           if: steps.get_args.outputs.CMPL_BIN == 'true'
-          run: docker push ${{ env.REGISTRY }}/${{ env.REPOSITORY_NAME }}/${{ steps.get_args.outputs.IMG_NAME }}_binaries"
+          run: docker push ${{ env.REGISTRY }}/${{ env.REPOSITORY_NAME }}/${{ env.IMAGE_PREFIX }}${{ steps.get_args.outputs.IMG_NAME }}_binaries"
 
     trigger_children_build:
       runs-on: [ubuntu-latest]
