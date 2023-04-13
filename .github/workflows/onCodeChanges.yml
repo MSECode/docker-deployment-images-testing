@@ -702,7 +702,7 @@ jobs:
                 fi  
                 if [[ $tag_flag != false ]] 
                 then
-                    tag_arg="--tag ${{env.DEFAULT_USER}}/\"$line\"
+                    tag_arg="--tag ${{env.DEFAULT_USER}}/\"$line"
                     img_name="\"$line"
                 fi
               fi
